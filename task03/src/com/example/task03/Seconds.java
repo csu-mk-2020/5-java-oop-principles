@@ -8,6 +8,8 @@ public class Seconds implements TimeUnit {
     private final long amount;
 
     public Seconds(long amount) {
+        if (amount < 0)
+            throw new IllegalArgumentException("amount must be >= 0");
         this.amount = amount;
     }
 
