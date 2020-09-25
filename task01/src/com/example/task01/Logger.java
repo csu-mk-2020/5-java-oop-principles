@@ -3,29 +3,28 @@ package com.example.task01;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.Objects;
 
 public class Logger {
     private static final Hashtable<String, Logger> loggers = new Hashtable<>();
-    private String name;
+    private final String name;
     private LoggerLevel level = LoggerLevel.ERROR;
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat(" yyyy.MM.dd hh:mm:ss ");
+
+    protected Logger(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;
     }
 
     public static Logger getLogger(String name) {
-        Logger logger = Logger.loggers.get(name);
-        if (logger == null) {
-            logger = new Logger();
-            logger.name = name;
-            Logger.loggers.put(name, logger);
-        }
-        return logger;
+        return Logger.loggers.computeIfAbsent(name, Logger::new);
     }
 
     public void setLevel(LoggerLevel level) {
-        this.level = level;
+        this.level = Objects.requireNonNull(level);
     }
 
     public LoggerLevel getLevel() {
