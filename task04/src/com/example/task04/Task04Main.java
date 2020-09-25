@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 public class Task04Main {
 
     public static void testMemoryHandler() {
-        Logger logger = new Logger();
+        Logger logger = Logger.getLogger("test1");
         logger.setLevel(LoggerLevel.INFO);
         ConsoleHandler consoleHandler = new ConsoleHandler();
         MemoryHandler memoryHandler = new MemoryHandler(consoleHandler, 10);
@@ -27,7 +27,7 @@ public class Task04Main {
     }
 
     public static void testRotationFileHandler() {
-        Logger logger = new Logger();
+        Logger logger = Logger.getLogger("test2");
         logger.setLevel(LoggerLevel.INFO);
         RotationFileHandler rotationFileHandler;
         try {
