@@ -1,14 +1,17 @@
 package com.example.task04;
 
+import org.omg.CORBA.Object;
+
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Objects;
 
 public class FileHandler implements MessageHandler {
 
     protected FileWriter fileWriter;
 
     public FileHandler(FileWriter fileWriter) {
-        this.fileWriter = fileWriter;
+        this.fileWriter = Objects.requireNonNull(fileWriter);
     }
 
     public FileHandler() throws IOException {

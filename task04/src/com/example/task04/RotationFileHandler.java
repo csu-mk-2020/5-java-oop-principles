@@ -3,6 +3,7 @@ package com.example.task04;
 import java.io.Closeable;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
@@ -45,6 +46,9 @@ public class RotationFileHandler extends FileHandler implements Closeable {
 
     public RotationFileHandler(long delay, TimeUnit unit) throws IOException {
         super();
+        if (delay < 0)
+            throw new IllegalArgumentException("delay must be >= 0");
+        Objects.requireNonNull(unit);
         this.executor.scheduleWithFixedDelay(new Task(), delay, delay, unit);
     }
 

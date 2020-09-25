@@ -1,6 +1,7 @@
 package com.example.task04;
 
 import java.util.ArrayDeque;
+import java.util.Objects;
 
 public class MemoryHandler implements MessageHandler{
 
@@ -12,10 +13,10 @@ public class MemoryHandler implements MessageHandler{
         if (messageHandler instanceof MemoryHandler)
             throw new IllegalArgumentException("MemoryHandler is not allowed");
         if (limit <= 0)
-            limit = 10;
+            throw new IllegalArgumentException("limit must be >= 0");
         this.limit = limit;
         this.messages = new ArrayDeque<>(this.limit);
-        this.messageHandler = messageHandler;
+        this.messageHandler = Objects.requireNonNull(messageHandler);
     }
 
     @Override
