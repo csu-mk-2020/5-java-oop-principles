@@ -1,12 +1,15 @@
 package com.example.task02;
 
 public class DiscountBill extends Bill {
-    long discount = 0;
+    private final long discount;
 
+    /**
+     * @param discount - скидка в процентах
+     */
     DiscountBill(long discount) {
-        if (discount <= 100) {
-            this.discount = discount;
-        }
+        if (discount < 0 || discount > 100)
+            throw new IllegalArgumentException("0 < discount <= 100");
+        this.discount = discount;
     }
 
     public long getPrice() {
