@@ -1,7 +1,5 @@
 package com.example.task04;
 
-import org.omg.CORBA.Object;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Objects;
