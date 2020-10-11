@@ -23,7 +23,7 @@ public class RotationFileHandler extends FileHandler {
         if (Duration.between(_lastHandleTime, now).compareTo(_interval) >= 0) {
             try {
                 _writer.close();
-                _writer = new FileWriter("log" + _index++ + ".txt");
+                _writer = new FileWriter("log" + ++_index + ".txt");
             }
             catch(IOException ex) {
                 ex.printStackTrace();
