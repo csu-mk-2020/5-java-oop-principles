@@ -6,22 +6,31 @@ public class DiscountBill extends Bill {
     /**
      * @param discount - скидка в процентах
      */
-    DiscountBill(long discount) {
+    public DiscountBill(long discount) {
         if (discount < 0 || discount > 100)
             throw new IllegalArgumentException("0 < discount <= 100");
         this.discount = discount;
     }
 
+    /**
+     * @return цена с учётом скидки
+     */
     public long getPrice() {
         long price = super.getPrice();
         return (long) (price * (1d - discount / 100d));
     }
 
+    /**
+     * @return разница между суммой и суммой со скидкой
+     */
     public long getAbsDiscount() {
         long price = super.getPrice();
         return (long) (price * discount / 100d);
     }
 
+    /**
+     * @return размера скидки (в процентах)
+     */
     public long getDiscountInPercents() {
         return discount;
     }
