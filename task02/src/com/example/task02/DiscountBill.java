@@ -17,15 +17,14 @@ public class DiscountBill extends Bill {
      */
     public long getPrice() {
         long price = super.getPrice();
-        return (long) (price * (1d - discount / 100d));
+        return (long) (price - price * discount / 100d);
     }
 
     /**
      * @return разница между суммой и суммой со скидкой
      */
     public long getAbsDiscount() {
-        long price = super.getPrice();
-        return (long) (price * discount / 100d);
+        return (long) (super.getPrice() * discount / 100d);
     }
 
     /**
