@@ -2,13 +2,13 @@ package com.example.task03;
 
 public class Hours implements TimeUnit {
 
-    private final long _amount;
+    private final long amount;
 
     public Hours(long amount) throws IllegalArgumentException {
         if (amount < 0) {
             throw new IllegalArgumentException("Hours cannot be below zero");
         }
-        _amount = amount;
+        this.amount = amount;
     }
 
     @Override
@@ -23,11 +23,11 @@ public class Hours implements TimeUnit {
 
     @Override
     public long toMinutes() {
-        return _amount * 60;
+        return this.amount * 60;
     }
 
     @Override
     public long toHours() {
-        return _amount;
+        return this.amount;
     }
 }
