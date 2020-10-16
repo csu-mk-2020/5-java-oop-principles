@@ -7,29 +7,29 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class RotationFileHandler extends FileHandler {
-    private final Duration _interval;
-    private LocalDateTime _lastHandleTime = LocalDateTime.now();
-    private long _index = 1;
+    private final Duration interval;
+    private LocalDateTime lastHandleTime = LocalDateTime.now();
+    private long index = 1;
 
     public RotationFileHandler(Duration interval) throws IOException {
         super("log1.txt");
         Objects.requireNonNull(interval);
-        _interval = interval;
+        this.interval = interval;
     }
 
     @Override
     public void handle(String message) {
         LocalDateTime now = LocalDateTime.now();
-        if (Duration.between(_lastHandleTime, now).compareTo(_interval) >= 0) {
+        if (Duration.between(lastHandleTime, now).compareTo(interval) >= 0) {
             try {
-                _writer.close();
-                _writer = new FileWriter("log" + ++_index + ".txt");
+                writer.close();
+                writer = new FileWriter("log" + ++index + ".txt");
             }
             catch(IOException ex) {
                 ex.printStackTrace();
             }
         }
-        _lastHandleTime = now;
+        lastHandleTime = now;
         super.handle(message);
     }
 }
