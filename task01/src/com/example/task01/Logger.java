@@ -7,13 +7,13 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Logger {
-    private final String _name;
-    private static final Map<String, Logger> _loggers = new Hashtable<>();
-    private LoggerLevel _level = LoggerLevel.DEBUG;
+    private final String name;
+    private static final Map<String, Logger> loggers = new Hashtable<>();
+    private LoggerLevel level = LoggerLevel.DEBUG;
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
 
     protected boolean CanBeLogged(LoggerLevel level) {
-        return _level.ordinal() <= level.ordinal();
+        return level.ordinal() <= this.level.ordinal();
     }
 
     private void log(LoggerLevel level, String message) throws NullPointerException {
@@ -25,7 +25,7 @@ public class Logger {
                 "[%s] %s %s - %s%n",
                 level.toString(),
                 dateFormat.format(new Date()),
-                _name,
+                name,
                 message
         );
     }
@@ -35,24 +35,24 @@ public class Logger {
     }
 
     protected Logger(String name) {
-        _name = name;
+        this.name = name;
     }
 
     public static Logger getLogger(String name) throws NullPointerException  {
         Objects.requireNonNull(name);
-        return _loggers.computeIfAbsent(name, Logger::new);
+        return loggers.computeIfAbsent(name, Logger::new);
     }
 
     public String getName() {
-        return _name;
+        return name;
     }
 
     public LoggerLevel getLevel() {
-        return _level;
+        return level;
     }
 
     public void setLevel(LoggerLevel level) {
-        _level = level;
+        this.level = level;
     }
 
     public void debug(String message) {
