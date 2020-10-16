@@ -12,13 +12,13 @@ public class Logger {
     private LoggerLevel level = LoggerLevel.DEBUG;
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
 
-    protected boolean CanBeLogged(LoggerLevel level) {
-        return level.ordinal() <= this.level.ordinal();
+    protected boolean canBeLogged(LoggerLevel level) {
+        return this.level.ordinal() <= level.ordinal();
     }
 
     private void log(LoggerLevel level, String message) throws NullPointerException {
         Objects.requireNonNull(message);
-        if (!CanBeLogged(level)) {
+        if (!canBeLogged(level)) {
             return;
         }
         System.out.printf(
