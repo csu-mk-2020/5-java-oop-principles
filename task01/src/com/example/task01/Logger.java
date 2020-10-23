@@ -9,6 +9,7 @@ public class Logger {
     private static final Hashtable<String, Logger> loggers = new Hashtable<>();
     private final String name;
     private LoggerLevel level = LoggerLevel.DEBUG;
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat(" yyyy.MM.dd hh:mm:ss ");
 
     private Logger(String name) {
         this.name = name;
@@ -35,7 +36,7 @@ public class Logger {
         if (level.ordinal() >= this.level.ordinal()) {
             System.out.printf("[%s] %s %s - %s\n",
                     level.toString(),
-                    new SimpleDateFormat("yyyy.MM.dd hh:mm:ss").format(new Date()),
+                    dateFormat,
                     this.name,
                     text
             );
@@ -46,7 +47,7 @@ public class Logger {
         if (level.ordinal() >= this.level.ordinal()) {
             System.out.printf("[%s] %s %s - %s\n",
                     level.toString(),
-                    new SimpleDateFormat("yyyy.MM.dd hh:mm:ss").format(new Date()),
+                    dateFormat,
                     this.name,
                     String.format(format, args)
             );
