@@ -1,6 +1,5 @@
 package com.example.task04;
 
-import java.io.Closeable;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Objects;
@@ -9,22 +8,24 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-public class RotationFileHandler extends FileHandler implements Closeable {
+class ScheduledExecutorServiceCloser implements Runnable {
+    private final ScheduledExecutorService executor;
 
-    private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-    private final Semaphore semaphore = new Semaphore(1, true);
+    ScheduledExecutorServiceCloser(ScheduledExecutorService executor) {
+        this.executor = Objects.requireNonNull(executor);
+    }
 
     @Override
-    public void close() {
-        try {
-            semaphore.acquire();
-            this.executor.shutdown();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            semaphore.release();
-        }
+    public void run() {
+        this.executor.shutdown();
     }
+}
+
+public class RotationFileHandler extends FileHandler {
+
+    private static final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+    private static int InstanceCounter = 0;
+    private final Semaphore semaphore = new Semaphore(1, true);
 
     private class Task implements Runnable {
         private int i = 1;
@@ -33,12 +34,16 @@ public class RotationFileHandler extends FileHandler implements Closeable {
         public void run() {
             try {
                 semaphore.acquire();
-                fileWriter.close();
-                fileWriter = new FileWriter("log" + i);
-            } catch (InterruptedException | IOException e) {
+                try {
+                    fileWriter.close();
+                    fileWriter = new FileWriter("log" + i);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    semaphore.release();
+                }
+            } catch (InterruptedException e) {
                 e.printStackTrace();
-            } finally {
-                semaphore.release();
             }
             ++i;
         }
@@ -49,7 +54,12 @@ public class RotationFileHandler extends FileHandler implements Closeable {
         if (delay < 0)
             throw new IllegalArgumentException("delay must be >= 0");
         Objects.requireNonNull(unit);
-        this.executor.scheduleWithFixedDelay(new Task(), delay, delay, unit);
+        RotationFileHandler.executor.scheduleWithFixedDelay(new Task(), delay, delay, unit);
+        if (RotationFileHandler.InstanceCounter == 0) {
+            Runtime.getRuntime().addShutdownHook(
+                    new Thread(new ScheduledExecutorServiceCloser(RotationFileHandler.executor)));
+        }
+        ++RotationFileHandler.InstanceCounter;
     }
 
     @Override
@@ -57,10 +67,9 @@ public class RotationFileHandler extends FileHandler implements Closeable {
         try {
             semaphore.acquire();
             super.handleMessage(message);
+            semaphore.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        } finally {
-            semaphore.release();
         }
     }
 

@@ -44,7 +44,6 @@ public class Task04Main {
             e.printStackTrace();
         }
         logger.info("log2");
-        rotationFileHandler.close();
     }
 
     public static void main(String[] args) {
