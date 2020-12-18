@@ -1,10 +1,10 @@
 package com.example.task03;
 
-public class Minutes implements TimeUnit {
+public class Hours implements TimeUnit {
 
     private final long amount;
 
-    public Minutes(long amount) {
+    public Hours(long amount) {
         if (amount < 0)
             throw new IllegalArgumentException("amount must be >= 0");
         this.amount = amount;
@@ -12,21 +12,21 @@ public class Minutes implements TimeUnit {
 
     @Override
     public long toMillis() {
-        return this.amount * 60000;
+        return this.toSeconds() * 1000;
     }
 
     @Override
     public long toSeconds() {
-        return this.amount * 60;
+        return this.toMinutes() * 60;
     }
 
     @Override
     public long toMinutes() {
-        return this.amount;
+        return this.amount * 60;
     }
 
     @Override
     public long toHours() {
-        return Math.round(this.amount / 60d);
+        return this.amount;
     }
 }
