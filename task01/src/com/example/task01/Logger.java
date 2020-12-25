@@ -17,6 +17,7 @@ public class Logger {
     }
 
     private void log(LoggerLevel level, String message) throws NullPointerException {
+        Objects.requireNonNull(level);
         Objects.requireNonNull(message);
         if (!canBeLogged(level)) {
             return;
@@ -52,6 +53,7 @@ public class Logger {
     }
 
     public void setLevel(LoggerLevel level) {
+        Objects.requireNonNull(level);
         this.level = level;
     }
 
