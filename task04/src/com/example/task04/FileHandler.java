@@ -10,6 +10,16 @@ public class FileHandler implements MessageHandler {
     public FileHandler(String filePath) throws IOException {
         Objects.requireNonNull(filePath);
         writer = new FileWriter(filePath);
+        Runtime.getRuntime().addShutdownHook(new Thread(this::closeWriter));
+    }
+
+    private void closeWriter() {
+        try {
+            this.writer.close();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

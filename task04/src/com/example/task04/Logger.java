@@ -12,8 +12,11 @@ public class Logger {
 
     private void log(LoggerLevel level, String message) throws NullPointerException {
         Objects.requireNonNull(message);
-        if (!CanBeLogged(level)) {
+        if (!canBeLogged(level)) {
             return;
+        }
+        if (handlers.size() == 0) {
+            throw new IllegalStateException("You didn't register any handlers for logger with name " + name);
         }
         for(MessageHandler handler: handlers) {
             handler.handle(
@@ -28,7 +31,7 @@ public class Logger {
         }
     }
 
-    protected boolean CanBeLogged(LoggerLevel level) {
+    protected boolean canBeLogged(LoggerLevel level) {
         Objects.requireNonNull(level);
         return this.level.ordinal() <= level.ordinal();
     }
@@ -37,21 +40,16 @@ public class Logger {
         log(level, String.format(format, objects));
     }
 
-    public Logger(String name, MessageHandler handler) {
+    protected Logger(String name) {
         Objects.requireNonNull(name);
-        Objects.requireNonNull(handler);
-        if (loggers.containsKey(name)) {
-            throw new IllegalArgumentException("Logger with the same name already exists");
-        }
         this.name = name;
-        handlers.add(handler);
         loggers.put(name, this);
     }
 
     public static Logger getLogger(String name) {
         Objects.requireNonNull(name);
         if (!loggers.containsKey(name)) {
-            throw new IllegalArgumentException(String.format("Logger with name %s doesn't exists", name));
+            loggers.computeIfAbsent(name, Logger::new);
         }
         return loggers.get(name);
     }
@@ -69,6 +67,7 @@ public class Logger {
     }
 
     public void setLevel(LoggerLevel level) {
+        Objects.requireNonNull(level);
         this.level = level;
     }
 

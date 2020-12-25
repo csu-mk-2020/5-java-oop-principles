@@ -27,6 +27,7 @@ public class MemoryHandler implements MessageHandler {
     public void flush() {
         while(messages.size() != 0) {
             handler.handle(messages.poll());
+            messages.remove();
         }
     }
 }
