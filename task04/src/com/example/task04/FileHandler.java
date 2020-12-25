@@ -32,10 +32,4 @@ public class FileHandler implements MessageHandler {
             ex.printStackTrace();
         }
     }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        writer.close();
-    }
 }
