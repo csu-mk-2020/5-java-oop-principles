@@ -7,20 +7,13 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-enum LogLevels {
-    DEBUG,
-    INFO,
-    WARNING,
-    ERROR
-}
-
 public class Logger {
     private LogLevels thisLevel;
     private String name;
     private static int maxLevel = 0;
     private static List<Logger> loggerList = new ArrayList<>();
 
-    public Logger(String Name) {
+    protected Logger(String Name) {
         name = Name;
         loggerList.add(this);
     }
@@ -69,78 +62,42 @@ public class Logger {
 
     public void log(LogLevels level, String message, Object... obj) {
         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-        System.out.println("[" + level + "] " + sdfDate.format(new Date()) + " " + this.name + " - " + String.format(message, obj));
+
+        if (level.ordinal() >= this.thisLevel.ordinal()) {
+            System.err.println("[" + this.thisLevel.toString() + "]" + sdfDate.format(new Date()) +
+                    this.name + " - " + message);
+        }
     }
 
     public void debug(String msg) {
-        if (maxLevel < 1) {
-            setLevel(LogLevels.DEBUG);
-        }
-        if (maxLevel == 1) {
-            log(LogLevels.DEBUG, msg);
-        }
+        this.log(LogLevels.DEBUG, msg);
     }
 
     public void debug(String template, Object... obj) {
-        if (maxLevel < 1) {
-            setLevel(LogLevels.DEBUG);
-        }
-        if (maxLevel == 1) {
-            log(LogLevels.DEBUG, template, obj);
-        }
+        this.log(LogLevels.DEBUG, template, obj);
     }
 
     public void info(String msg) {
-        if (maxLevel < 2) {
-            setLevel(LogLevels.INFO);
-        }
-        if (maxLevel == 2) {
-            log(LogLevels.INFO, msg);
-        }
+        this.log(LogLevels.INFO, msg);
     }
 
     public void info(String template, Object... obj) {
-        if (maxLevel < 2) {
-            setLevel(LogLevels.INFO);
-        }
-        if (maxLevel == 2) {
-            log(LogLevels.INFO, template, obj);
-        }
+        this.log(LogLevels.INFO, template, obj);
     }
 
     public void warning(String msg) {
-        if (maxLevel < 3) {
-            setLevel(LogLevels.WARNING);
-        }
-        if (maxLevel == 3) {
-            log(LogLevels.WARNING, msg);
-        }
+        this.log(LogLevels.WARNING, msg);
     }
 
     public void warning(String template, Object... obj) {
-        if (maxLevel < 3) {
-            setLevel(LogLevels.WARNING);
-        }
-        if (maxLevel == 3) {
-            log(LogLevels.WARNING, template, obj);
-        }
+        this.log(LogLevels.WARNING, template, obj);
     }
 
     public void error(String msg) {
-        if (maxLevel < 4) {
-            setLevel(LogLevels.ERROR);
-        }
-        if (maxLevel == 4) {
-            log(LogLevels.ERROR, msg);
-        }
+        this.log(LogLevels.ERROR, msg);
     }
 
     public void error(String template, Object... obj) {
-        if (maxLevel < 4) {
-            setLevel(LogLevels.ERROR);
-        }
-        if (maxLevel == 4) {
-            log(LogLevels.ERROR, template, obj);
-        }
+        this.log(LogLevels.ERROR, template, obj);
     }
 }
