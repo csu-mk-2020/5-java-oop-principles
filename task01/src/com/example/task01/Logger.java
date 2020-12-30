@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class Logger {
@@ -12,6 +13,7 @@ public class Logger {
     private String name;
     private static int maxLevel = 0;
     private static List<Logger> loggerList = new ArrayList<>();
+    private static SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 
     protected Logger(String Name) {
         name = Name;
@@ -36,7 +38,7 @@ public class Logger {
     }
 
     public void setLevel(LogLevels lvl) {
-        thisLevel = lvl;
+        thisLevel = Objects.requireNonNull(lvl);
 
         switch (lvl) {
             case DEBUG:
@@ -61,8 +63,6 @@ public class Logger {
     }
 
     public void log(LogLevels level, String message, Object... obj) {
-        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-
         if (level.ordinal() >= this.thisLevel.ordinal()) {
             System.err.println("[" + this.thisLevel.toString() + "]" + sdfDate.format(new Date()) +
                     this.name + " - " + message);
